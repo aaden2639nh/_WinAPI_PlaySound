@@ -1,0 +1,25 @@
+(See MSDN for more information)
+;
+; $hInstance - Handle to the executable file that contains the resource to be loaded. If $iFlags does not
+; contain the $SND_RESOURCE, this parameter will be ignored.
+; Return values..: Success - 1.
+; Failure - 0 and sets the @error flag to non-zero.
+; Author.........: Yashied
+; Modified.......:
+; Remarks........: None
+; Related........:
+; Link...........: @@MsdnLink@@ PlaySound
+; Example........: Yes
+; ===============================================================================================================================
+Func _WinAPI_PlaySound($sSound, $iFlags = 0x00020010, $hInstance = 0)
+    Local $TypeOfSound = 'ptr'
+    If $sSound Then
+        If IsString($sSound) Then $TypeOfSound = 'wstr'
+    Else
+        $sSound = 0
+        $iFlags = 0
+    EndIf
+    Local $Ret = DllCall('winmm.dll', 'int', 'PlaySoundW', $TypeOfSound, $sSound, 'ptr', $hInstance, 'dword', $iFlags)
+    If (@error) Or (Not $Ret[0]) Then Return SetError(1, 0, 0)
+    Return 1
+EndFunc   ;==>_WinAPI_PlaySound
